@@ -9,7 +9,6 @@ class Ship():
         self.screen = screen
         self.ai_settings = ai_settings
 
-
         #Загрузка изображения коробля и получение прямоугольника.
         self.image = pygame.image.load('.\images\ship.bmp')
         self.rect = self.image.get_rect()
