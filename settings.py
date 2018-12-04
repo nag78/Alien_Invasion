@@ -10,3 +10,9 @@ class Settings():
 
         # Настройки корабля
         self.ship_speed_factor = 1.5
+
+        #Параметры пули
+        self.bullet_speed_facktor = 1
+        self.bullet_width = 3
+        self.bullet_height = 15
+        self.bullet_color = 60,60,60
