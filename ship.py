@@ -14,7 +14,7 @@ class Ship():
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
         # Каждый новый корабль появляется у нижнего края экрана.
-        self.rect.centrx = self.screen_rect.centrx
+        self.rect.centerx = self.screen_rect.centerx
         self.rect.bottom = self.screen_rect.bottom
 
     def blitme(self):
