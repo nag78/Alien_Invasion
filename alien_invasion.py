@@ -22,9 +22,5 @@ def run_game():
     while True:
         #Отслеживание событий клавиатуры и мыши.
         gf.check_events()
-        #При каждом проходе цикла перерисовывается экрае
-        screen.fill(ai_settings.bg_color)
-        ship.blitme()
-        #Отображение последнего прорисованного экрана.
-        pygame.display.flip()
+        gf.update_screen(ai_settings,screen,ship)
 run_game()
