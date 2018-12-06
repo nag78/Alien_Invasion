@@ -13,10 +13,16 @@ def check_keydown_events(event,ai_settings,screen,ship,bullets):
         #Переместить корабль влево.
         ship.moving_left = True
     elif event.key == pygame.K_SPACE:
-        #Создание новой пули и включение ее в группу bullets.
-        if len(bullets) < ai_settings.bullets_allowed:
-            new_bullet = Bullet(ai_settings,screen,ship)
-            bullets.add(new_bullet)
+        fire_bullet(ai_settings,screen,ship,bullets)
+
+def fire_bullet(ai_settings,screen,ship,bullets):
+    """
+    Выпускает пулю, если максимум ещё не достгнут.
+    """
+    #Создание новой пули и включение ее в группу bullets.
+    if len(bullets) < ai_settings.bullets_allowed:
+        new_bullet = Bullet(ai_settings,screen,ship)
+        bullets.add(new_bullet)
 
 
 def check_keyup_event(event,ai_settings,screen,ship,bullets):
