@@ -131,4 +131,32 @@ def get_number_rows(ai_settings,ship_height,alien_height):
     return number_rows
 
 
+def update_aliens (ai_settings,aliens):
+    """
+    Проверяет достиг ли флот края Экрана.
+    Обновляет позиции всех пришельцев во флоте.
+    """
+    check_fleet_edges(ai_settings,aliens)
+    aliens.update()
+
+def check_fleet_edges(ai_settings,aliens):
+    """
+    Реагирует на достижение пришельцами края экрана.
+    """
+    for alien in aliens.sprites():
+        if alien.check_edges():
+            change_fleet_direction(ai_settings,aliens)
+            break
+
+def change_fleet_direction(ai_settings,aliens):
+    """
+    Опускает весь флот и меняет направление флота.
+    """
+    for alien in aliens.sprites():
+        alien.rect.y += ai_settings.fleet_drop_speed
+    ai_settings.fleet_direction *= -1
+
+
+
+
 
