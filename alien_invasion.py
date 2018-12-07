@@ -1,4 +1,3 @@
-import sys
 import pygame
 from settings import Settings
 from ship import Ship
@@ -16,14 +15,18 @@ def run_game():
     # Создание коробля
     ship = Ship(ai_settings,screen)
 
-    #Создание группы для хранения пуль
+    #Создание группы для хранения пуль и группы пришельцев.
     bullets = Group()
+    aliens = Group()
+
+    #Создание флота пришельцев
+    gf.create_fleet(ai_settings,screen,ship,aliens)
 
     #Запуск основного цикла игры
     while True:
         #Отслеживание событий клавиатуры и мыши.
         gf.check_events(ai_settings,screen,ship,bullets)
         ship.update()
-        bullets.update()
-        gf.update_screen(ai_settings,screen,ship,bullets)
+        gf.update_bullets(bullets)
+        gf.update_screen(ai_settings,screen,ship,aliens,bullets)
 run_game()
