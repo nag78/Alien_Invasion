@@ -2,6 +2,28 @@ import sys
 import pygame
 from bullet import Bullet
 from alien import Alien
+from time import sleep
+
+def ship_hit(ai_settings,stats,screen,ship,aliens,bullets):
+    """
+    Обрабатывает столкновение корабля с пришельцем.
+    """
+    if stats.ship_left > 0:
+        #Уменьшить ship_left
+        stats.ship_left -= 1
+
+        #Очистка списков пришельцев и пуль
+        aliens.empty()
+        bullets.empty()
+
+        #создание нового флота и размещения пришельцев
+        create_fleet(ai_settings, screen, ship, aliens)
+        ship.center_ship()
+
+        #Пауза
+        sleep(0.5)
+    else:
+        stats.game_active = False
 
 def check_keydown_events(event,ai_settings,screen,ship,bullets):
     """
@@ -145,7 +167,7 @@ def get_number_rows(ai_settings,ship_height,alien_height):
     return number_rows
 
 
-def update_aliens (ai_settings,ship,aliens):
+def update_aliens (ai_settings,stats,screen,ship,aliens,bullets):
     """
     Проверяет достиг ли флот края Экрана.
     Обновляет позиции всех пришельцев во флоте.
@@ -155,7 +177,11 @@ def update_aliens (ai_settings,ship,aliens):
 
     #Проверка коллизии корабль пришелец
     if pygame.sprite.spritecollideany(ship,aliens):
-        print("Ship hit!!!")
+        #print("Ship hit!!!")
+        ship_hit(ai_settings,stats,screen,ship,aliens,bullets)
+
+    #Проверка пришельцевб добравшихся до нижнего края экрана.
+    check_aliens_bottom(ai_settings,stats,screen,ship,aliens,bullets)
 
 def check_fleet_edges(ai_settings,aliens):
     """
@@ -174,6 +200,16 @@ def change_fleet_direction(ai_settings,aliens):
         alien.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1
 
+def check_aliens_bottom(ai_settings,stats,screen,ship,aliens,bullets):
+    """
+    Проверяет, добрались ли пришельцы до нижнего края экрана.
+    """
+    screen_rect = screen.get_rect()
+    for alien in aliens.sprites():
+        if alien.rect.bottom >= screen_rect.bottom:
+            #Происходит то же, что и при столкновении с кораблем.
+            ship_hit(ai_settings,stats,screen,ship,aliens,bullets)
+            break
 
 
 
