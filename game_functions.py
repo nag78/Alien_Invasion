@@ -73,7 +73,7 @@ def check_events(ai_settings,screen,ship,bullets):
         elif event.type == pygame.KEYUP:
             check_keyup_event(event,ai_settings,screen,ship,bullets)
 
-def update_screen(ai_settings,screen,ship,aliens,bullets):
+def update_screen(ai_settings,screen,stats,ship,aliens,bullets,play_button):
     """
     Обновляет изображение на экране и отображает новый экран.
     """
@@ -85,6 +85,11 @@ def update_screen(ai_settings,screen,ship,aliens,bullets):
     #Все пули выводятся позади изображений корабля и пришельцев.
     for bullet in bullets.sprites():
         bullet.draw_bullet()
+
+    #Кнопка Play отображается в том случае если игра не активна
+    if not stats.game_active:
+        play_button.draw_button()
+
 
     #Отображение последнего прорисованного экрана.
     pygame.display.flip()
