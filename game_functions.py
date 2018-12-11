@@ -67,7 +67,7 @@ def update_screen(ai_settings,screen,ship,aliens,bullets):
     #Отображение последнего прорисованного экрана.
     pygame.display.flip()
 
-def update_bullets(bullets):
+def update_bullets(ai_settings,screen,ship,aliens,bullets):
     """
     Обновляет позицию пуль и уничтожает старые пули
     """
@@ -78,6 +78,20 @@ def update_bullets(bullets):
         if bullet.rect.bottom <= 0:
             bullet.remove(bullets)
         #print(len(bullets))
+    check_bullet_alien_collision(ai_settings,screen,ship, aliens, bullets)
+
+def check_bullet_alien_collision(ai_settings,screen,ship, aliens, bullets):
+    """
+    Обработка коллизий пуль с пришельцами.
+    """
+    #Проверка попаданий в пришельцев
+    #При обнаружении коллизии удаляет пулю и пришельца
+    collissions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+    if len(aliens) == 0:
+    #Уничтожение существующих пуль и создание нового флота.
+        bullets.empty()
+        create_fleet(ai_settings,screen,ship,aliens)
+
 
 def create_fleet(ai_settings,screen,ship,aliens):
     """
@@ -155,6 +169,7 @@ def change_fleet_direction(ai_settings,aliens):
     for alien in aliens.sprites():
         alien.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1
+
 
 
 
