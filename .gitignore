@@ -2,3 +2,4 @@
 *.whl
 *.pyc
 *.zip
+.vscode/settings.json
