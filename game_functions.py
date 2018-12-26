@@ -96,6 +96,8 @@ def check_play_button(ai_settings, screen, stats, play_button, ship,
     """
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if button_clicked and not stats.game_active:
+        # Сброс игровых настроек
+        ai_settings.inicialize_dinamic_settings()
         start_game(ai_settings, screen, stats, ship, aliens, bullets)
 
 
@@ -160,8 +162,9 @@ def check_bullet_alien_collision(ai_settings, screen, ship, aliens, bullets):
     # При обнаружении коллизии удаляет пулю и пришельца
     pygame.sprite.groupcollide(bullets, aliens, True, True)
     if len(aliens) == 0:
-        # Уничтожение существующих пуль и создание нового флота.
+        # Уничтожение существующих пуль, и повышение скорости нового флота.
         bullets.empty()
+        ai_settings.increase_speed()
         create_fleet(ai_settings, screen, ship, aliens)
 
 
