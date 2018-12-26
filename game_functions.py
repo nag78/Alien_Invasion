@@ -118,7 +118,7 @@ def start_game(ai_settings, screen, stats, ship, aliens, bullets):
     pygame.mouse.set_visible(False)
 
 
-def update_screen(ai_settings, screen, stats, ship, aliens, bullets,
+def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets,
                   play_button):
     """
     Обновляет изображение на экране и отображает новый экран.
@@ -132,6 +132,9 @@ def update_screen(ai_settings, screen, stats, ship, aliens, bullets,
     for bullet in bullets.sprites():
         bullet.draw_bullet()
 
+    # Вывод счета
+    sb.show_score()
+
     # Кнопка Play отображается в том случае если игра не активна
     if not stats.game_active:
         play_button.draw_button()
@@ -140,7 +143,7 @@ def update_screen(ai_settings, screen, stats, ship, aliens, bullets,
     pygame.display.flip()
 
 
-def update_bullets(ai_settings, screen, ship, aliens, bullets):
+def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
     """
     Обновляет позицию пуль и уничтожает старые пули
     """
@@ -151,16 +154,22 @@ def update_bullets(ai_settings, screen, ship, aliens, bullets):
         if bullet.rect.bottom <= 0:
             bullet.remove(bullets)
         # print(len(bullets))
-    check_bullet_alien_collision(ai_settings, screen, ship, aliens, bullets)
+    check_bullet_alien_collision(ai_settings, screen, stats, sb, ship,
+                                 aliens, bullets)
 
 
-def check_bullet_alien_collision(ai_settings, screen, ship, aliens, bullets):
+def check_bullet_alien_collision(ai_settings, screen, stats, sb, ship,
+                                 aliens, bullets):
     """
     Обработка коллизий пуль с пришельцами.
     """
     # Проверка попаданий в пришельцев
     # При обнаружении коллизии удаляет пулю и пришельца
-    pygame.sprite.groupcollide(bullets, aliens, True, True)
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+    if collisions:
+        for aliens in collisions.values():
+            stats.score += ai_settings.alien_points * len(aliens)
+        sb.prep_score()
     if len(aliens) == 0:
         # Уничтожение существующих пуль, и повышение скорости нового флота.
         bullets.empty()
