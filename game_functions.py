@@ -5,14 +5,15 @@ from alien import Alien
 from time import sleep
 
 
-def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+def ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets):
     """
     Обрабатывает столкновение корабля с пришельцем.
     """
     if stats.ship_left > 0:
         # Уменьшить ship_left
         stats.ship_left -= 1
-
+        # Обновление игровой информации
+        sb.prep_ships()
         # Очистка списков пришельцев и пуль
         aliens.empty()
         bullets.empty()
@@ -237,7 +238,7 @@ def get_number_rows(ai_settings, ship_height, alien_height):
     return number_rows
 
 
-def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
+def update_aliens(ai_settings, screen, stats, sb, ship, aliens, bullets):
     """
     Проверяет достиг ли флот края Экрана.
     Обновляет позиции всех пришельцев во флоте.
@@ -248,10 +249,10 @@ def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     # Проверка коллизии корабль пришелец
     if pygame.sprite.spritecollideany(ship, aliens):
         # print("Ship hit!!!")
-        ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+        ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
     # Проверка пришельцевб добравшихся до нижнего края экрана.
-    check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
+    check_aliens_bottom(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
 
 def check_fleet_edges(ai_settings, aliens):
@@ -273,7 +274,7 @@ def change_fleet_direction(ai_settings, aliens):
     ai_settings.fleet_direction *= -1
 
 
-def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
+def check_aliens_bottom(ai_settings, screen, stats, sb, ship, aliens, bullets):
     """
     Проверяет, добрались ли пришельцы до нижнего края экрана.
     """
@@ -281,7 +282,7 @@ def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
             # Происходит то же, что и при столкновении с кораблем.
-            ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+            ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets)
             break
 
 
